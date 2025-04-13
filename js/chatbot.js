@@ -20,10 +20,7 @@ function formatTimestamp(date) {
 }
 
 // Message Handling
-function sendMessage() {
-  const response = await fetch('https://ideaforge-1.onrender.com/chatbot', {
-
-
+async function sendMessage() {
   const input = document.getElementById("userInput");
   const message = input.value.trim();
   if (!message) return;
@@ -42,18 +39,23 @@ function sendMessage() {
   document.getElementById("chatBox").appendChild(typingIndicator);
   scrollToBottom();
 
-  // Simulate bot response
-  setTimeout(() => {
+  try {
+    const response = await fetch('https://ideaforge-1.onrender.com/chatbot', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    const data = await response.json();
     typingIndicator.remove();
-    const responses = [
-      "I've processed your request...",
-      "Here's what I found...",
-      "Interesting question!",
-      "According to my knowledge...",
-      "Let me think about that..."
-    ];
-    addMessage(responses[Math.floor(Math.random() * responses.length)], "bot");
-  }, 1500 + Math.random() * 2000);
+    addMessage(data.reply || "Sorry, I didn't understand that.", "bot");
+
+  } catch (error) {
+    typingIndicator.remove();
+    addMessage("Server error. Please try again later.", "bot");
+  }
 }
 
 function addMessage(text, sender) {
