@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Messenger</title>
+    <link rel="stylesheet" href="css/message.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icons/icon-192x192.png">
+</head>
+<body>
+   
+    <div id="notification" class="notification"></div>
+
+    <!-- Username Modal -->
+    <div class="username-modal" id="usernameModal">
+        <div class="modal-content">
+            <div class="logo">
+                <i class="fas fa-comment-dots"></i>
+                <h1>Messenger</h1>
+            </div>
+            <h2>Enter Your Name</h2>
+            <input type="text" id="usernameInput" placeholder="Your nickname" autocomplete="off">
+            <button id="startChatting">Start Chatting</button>
+            <div class="privacy-notice">
+                <p>By continuing, you agree to our <a href="#">Privacy Policy</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer" style="display: none;">
+        <div class="chat-header">
+            <div class="header-left">
+                <h2 id="partnerName">Global Chat</h2>
+                <div class="connection-info">
+                    <div class="status" id="connectionStatus">● Connecting...</div>
+                    <div class="typing-indicator" id="typingIndicator"></div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="themeToggle"><i class="fas fa-moon"></i></button>
+                <button id="settingsBtn"><i class="fas fa-cog"></i></button>
+                <button id="helpBtn"><i class="fas fa-question"></i></button>
+            </div>
+        </div>
+
+        <div class="message-history" id="messageHistory"></div>
+
+        <div class="chat-controls">
+            <button id="attachBtn" title="Attach file"><i class="fas fa-paperclip"></i></button>
+            <div class="emoji-picker-container">
+                <button id="emojiBtn" title="Emoji"><i class="far fa-smile"></i></button>
+                <div class="emoji-picker" id="emojiPicker"></div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <textarea id="messageInput" placeholder="Type your message..." disabled></textarea>
+            <button id="sendButton" disabled><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- File Input (hidden) -->
+    <input type="file" id="fileInput" style="display: none;">
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@emoji-mart/react"></script>
+    <script src="js/message.js"></script>
+</body>
+</html>

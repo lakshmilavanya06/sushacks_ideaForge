@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Chatbot</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+  <div id="menu-toggle" onclick="toggleMenu()">
+    &#9776;
+  </div>
+  
+  <!-- Sidebar Menu -->
+  <nav id="sidebar">
+    <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+    <a href="idea.html"><i class="fas fa-lightbulb"></i> Ideas</a>
+    <a href="message.html"><i class="fas fa-users"></i> Collaborate</a>
+    <a href="chatbot.html"><i class="fas fa-robot"></i> AI Help</a>
+    <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </nav>
+  
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+  <style>
+    /* Hamburger icon */
+    #menu-toggle {
+      font-size: 30px;
+      cursor: pointer;
+      padding: 10px;
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 999;
+      background-color: #c148c7;
+      color: white;
+      border-radius: 5px;
+    }
+  
+    /* Sidebar styling */
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: -220px; /* Hidden by default */
+      width: 200px;
+      height: 100%;
+      background-color: #f5f5f5;
+      padding-top: 80px;
+      transition: left 0.3s ease;
+      box-shadow: 2px 0 5px rgba(134, 127, 201, 0.1);
+      z-index: 998;
+    }
+  
+    #sidebar a {
+      display: block;
+      padding: 15px 20px;
+      color: #8a63ff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background-color 0.2s ease;
+    }
+  
+    #sidebar a:hover {
+      background-color: #ddd;
+    }
+  
+    /* Show sidebar */
+    #sidebar.active {
+      left: 0;
+    }
+  </style>
+  
+  <script>
+    function toggleMenu() {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.toggle("active");
+    }
+  </script>
+  <div class="chat-container">
+    <div class="header">
+      <div class="header-icon"><i class="fas fa-robot"></i></div>
+      <h2>AI Assistant</h2>
+      <div class="status-dot"></div>
+      <button id="themeToggle"><i class="fas fa-moon"></i></button>
+    </div>
+    
+    <div class="chat-box" id="chatBox">
+      <div class="message bot">
+        <div class="message-content">Hello! How can I help you today? 🌟</div>
+        <div class="message-time">Just now</div>
+      </div>
+    </div>
+    
+    <div class="input-container">
+      <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
+      <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+  <script src="js/chatbot.js"></script>
+</body>
+</html>
