@@ -1,85 +1,323 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>IdeaForge - Anonymous Sharing</title>
-<link rel="stylesheet" href="css/idea.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IdeaForge - Share Ideas</title>
+  <style>
+    :root {
+      --primary: #5e57ff;
+      --secondary: #f23ca6;
+      --text-light: #fff;
+      --text-dark: #333;
+      --bg-light: #ffffff10;
+      --bg-dark: #00000020;
+      --card-light: #ffffff20;
+      --card-dark: #00000030;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, var(--primary), var(--secondary));
+      color: var(--text-light);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      transition: all 0.3s ease;
+    }
+
+    body.dark-mode {
+      background: linear-gradient(to bottom right, #2a2a72, #6a3093);
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: var(--bg-light);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .container {
+      background: var(--bg-dark);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-grow: 1;
+    }
+
+    .filters input,
+    .filters select {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      flex-grow: 1;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-dark);
+    }
+
+    .dark-mode .filters input,
+    .dark-mode .filters select {
+      background: rgba(0, 0, 0, 0.7);
+      color: var(--text-light);
+    }
+
+    button {
+      background-color: #fff;
+      color: var(--primary);
+      font-weight: bold;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode button {
+      background-color: #222;
+      color: #fff;
+    }
+
+    form input,
+    form textarea,
+    form select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text-dark);
+    }
+
+    .dark-mode form input,
+    .dark-mode form textarea,
+    .dark-mode form select {
+      background: rgba(0, 0, 0, 0.7);
+      color: var(--text-light);
+    }
+
+    form button {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .mic-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary);
+    }
+
+    .dark-mode .mic-btn {
+      color: #f23ca6;
+    }
+
+    .mic-active {
+      color: red;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    .idea-card {
+      background-color: var(--card-light);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .dark-mode .idea-card {
+      background-color: var(--card-dark);
+    }
+
+    .idea-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .idea-card h3 {
+      margin: 0 0 10px;
+    }
+
+    .idea-card p {
+      margin: 5px 0;
+    }
+
+    .tag {
+      background: #fff;
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 5px 5px 0 0;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .dark-mode .tag {
+      background: #333;
+      color: #fff;
+    }
+
+    .difficulty {
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 5px 5px 0 0;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .beginner {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .intermediate {
+      background: #FFC107;
+      color: black;
+    }
+
+    .advanced {
+      background: #F44336;
+      color: white;
+    }
+
+    .upvote-btn {
+      background: var(--primary);
+      color: white;
+      margin-top: 10px;
+      padding: 5px 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .upvote-btn:hover {
+      background: #4a42e0;
+    }
+
+    .dark-mode .upvote-btn {
+      background: #6a3093;
+    }
+
+    .comment-btn {
+      background: #607D8B;
+      color: white;
+      margin-top: 10px;
+      margin-left: 10px;
+      padding: 5px 10px;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .comment-btn:hover {
+      background: #455A64;
+    }
+
+    .comments-section {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      display: none;
+    }
+
+    .comments-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+
+    .comment {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .comment-form {
+      display: flex;
+      gap: 10px;
+    }
+
+    .comment-input {
+      flex-grow: 1;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 20px;
+      opacity: 0.7;
+    }
+
+    .author {
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .dark-mode .author {
+      color: #f23ca6;
+    }
+
+    @media (max-width: 600px) {
+      .filters {
+        flex-direction: column;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      .comment-form {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Add this inside <body> of each HTML page -->
-
-<!-- Hamburger Menu Icon -->
-<div id="menu-toggle" onclick="toggleMenu()">
-  &#9776;
-</div>
-
-<!-- Sidebar Menu -->
-<nav id="sidebar">
-  <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
-  <a href="idea.html"><i class="fas fa-lightbulb"></i> Ideas</a>
-  <a href="message.html"><i class="fas fa-users"></i> Collaborate</a>
-  <a href="chatbot.html"><i class="fas fa-robot"></i> AI Help</a>
-  <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
-</nav>
-
-<!-- Font Awesome CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-<style>
-  /* Hamburger icon */
-  #menu-toggle {
-    font-size: 30px;
-    cursor: pointer;
-    padding: 10px;
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 999;
-    background-color: #c148c7;
-    color: white;
-    border-radius: 5px;
-  }
-
-  /* Sidebar styling */
-  #sidebar {
-    position: fixed;
-    top: 0;
-    left: -220px; /* Hidden by default */
-    width: 200px;
-    height: 100%;
-    background-color: #f5f5f5;
-    padding-top: 80px;
-    transition: left 0.3s ease;
-    box-shadow: 2px 0 5px rgba(134, 127, 201, 0.1);
-    z-index: 998;
-  }
-
-  #sidebar a {
-    display: block;
-    padding: 15px 20px;
-    color: #8a63ff;
-    text-decoration: none;
-    font-size: 16px;
-    transition: background-color 0.2s ease;
-  }
-
-  #sidebar a:hover {
-    background-color: #ddd;
-  }
-
-  /* Show sidebar */
-  #sidebar.active {
-    left: 0;
-  }
-</style>
-
-<script>
-  function toggleMenu() {
-    const sidebar = document.getElementById("sidebar");
-    sidebar.classList.toggle("active");
-  }
-</script>
   <div class="container">
     <h1>IdeaForge</h1>
 
@@ -106,33 +344,334 @@
       <button id="themeToggle">🌓 Dark Mode</button>
     </div>
 
+    <!-- Idea Submission Form -->
     <form id="ideaForm">
-      <input type="text" id="nickname" placeholder="Your nickname (optional)" />
-      <input type="text" id="title" placeholder="Idea Title" required />
-      <textarea id="description" placeholder="Describe your idea..." rows="4" required></textarea>
-      <input type="text" id="tags" placeholder="Technologies (comma-separated, e.g. JavaScript, Python)" />
+      <div class="input-group">
+        <input type="text" id="nickname" placeholder="Your nickname (optional)" />
+      </div>
+      
+      <div class="input-group">
+        <input type="text" id="title" placeholder="Idea Title" required />
+        <button type="button" class="mic-btn" id="titleMic">🎤</button>
+      </div>
+      
+      <div class="input-group">
+        <textarea id="description" placeholder="Describe your idea..." rows="4" required></textarea>
+        <button type="button" class="mic-btn" id="descMic">🎤</button>
+      </div>
+      
+      <div class="input-group">
+        <input type="text" id="tags" placeholder="Technologies (comma-separated, e.g. JavaScript, Python)" />
+      </div>
+      
       <select id="difficulty" required>
         <option value="">Select difficulty level</option>
         <option value="beginner">Beginner</option>
         <option value="intermediate">Intermediate</option>
         <option value="advanced">Advanced</option>
       </select>
+      
       <button type="submit">Submit Idea</button>
     </form>
 
+    <!-- Your Ideas Section -->
     <h2 style="margin-top: 30px;">Your Ideas</h2>
     <div id="yourIdeasList" class="empty-state">
       <p>Your submitted ideas will appear here</p>
     </div>
 
+    <!-- Community Ideas Section -->
     <h2 style="margin-top: 30px;">Community Ideas</h2>
     <div id="ideaList" class="empty-state">
       <p>No ideas yet. Be the first to share!</p>
     </div>
   </div>
-  
-  <div class="voice-status" id="voiceStatus">Click the microphone and start speaking...</div>
-</body>
 
-<script src="js/idea.js"></script>
+  <script>
+    // DOM Elements
+    const ideaForm = document.getElementById("ideaForm");
+    const ideaList = document.getElementById("ideaList");
+    const yourIdeasList = document.getElementById("yourIdeasList");
+    const searchInput = document.getElementById("searchInput");
+    const languageFilter = document.getElementById("languageFilter");
+    const difficultyFilter = document.getElementById("difficultyFilter");
+    const themeToggle = document.getElementById("themeToggle");
+    const titleMic = document.getElementById("titleMic");
+    const descMic = document.getElementById("descMic");
+    const titleInput = document.getElementById("title");
+    const descInput = document.getElementById("description");
+
+    // Initialize ideas from localStorage
+    let ideas = JSON.parse(localStorage.getItem("ideaForgeIdeas")) || [];
+
+    // Bad words filter (basic example - you might want to expand this list)
+    const badWords = ['badword1', 'badword2', 'badword3']; // Add more as needed
+    
+    function filterBadWords(text) {
+      return text.split(' ').map(word => {
+        if (badWords.includes(word.toLowerCase())) {
+          return '*'.repeat(word.length);
+        }
+        return word;
+      }).join(' ');
+    }
+
+    // Speech recognition setup
+    let recognition;
+    let currentInputField = null;
+    
+    try {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        if (currentInputField) {
+          currentInputField.value += ' ' + transcript;
+        }
+      };
+      
+      recognition.onerror = function(event) {
+        console.error('Speech recognition error', event.error);
+        alert('Speech recognition error: ' + event.error);
+      };
+    } catch(e) {
+      console.warn('Speech recognition not supported', e);
+      titleMic.style.display = 'none';
+      descMic.style.display = 'none';
+    }
+
+    // Toggle microphone
+    function toggleMic(inputField, micBtn) {
+      if (!recognition) {
+        alert('Speech recognition is not supported in your browser');
+        return;
+      }
+      
+      if (recognition.recording) {
+        recognition.stop();
+        micBtn.classList.remove('mic-active');
+        currentInputField = null;
+      } else {
+        currentInputField = inputField;
+        micBtn.classList.add('mic-active');
+        recognition.start();
+      }
+    }
+
+    titleMic.addEventListener('click', () => toggleMic(titleInput, titleMic));
+    descMic.addEventListener('click', () => toggleMic(descInput, descMic));
+
+    // Generate unique ID
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+    }
+
+    // Save ideas to localStorage
+    function saveIdeas() {
+      localStorage.setItem("ideaForgeIdeas", JSON.stringify(ideas));
+    }
+
+    // Show notification
+    function showToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.add("show");
+        setTimeout(() => {
+          toast.classList.remove("show");
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }, 10);
+    }
+
+    // Display all ideas
+    function displayIdeas() {
+      const searchText = searchInput.value.toLowerCase();
+      const selectedLang = languageFilter.value;
+      const selectedDifficulty = difficultyFilter.value;
+      const currentNickname = document.getElementById("nickname").value.trim();
+
+      // Filter community ideas
+      const communityIdeas = ideas.filter(idea => {
+        const matchSearch = idea.title.toLowerCase().includes(searchText) || 
+                          idea.description.toLowerCase().includes(searchText);
+        const matchLang = !selectedLang || 
+                        idea.tags.some(tag => tag.toLowerCase() === selectedLang.toLowerCase());
+        const matchDifficulty = !selectedDifficulty || 
+                              idea.difficulty === selectedDifficulty;
+        return matchSearch && matchLang && matchDifficulty;
+      });
+
+      // Filter user's ideas
+      const userIdeas = currentNickname 
+        ? ideas.filter(idea => idea.nickname === currentNickname)
+        : [];
+
+      // Display community ideas
+      ideaList.innerHTML = communityIdeas.length 
+        ? communityIdeas.map(idea => createIdeaCard(idea)).join("")
+        : '<div class="empty-state"><p>No ideas found matching your criteria</p></div>';
+
+      // Display user's ideas
+      yourIdeasList.innerHTML = userIdeas.length 
+        ? userIdeas.map(idea => createIdeaCard(idea, true)).join("")
+        : `<div class="empty-state"><p>${
+            currentNickname 
+              ? "You haven't submitted any ideas yet" 
+              : "Enter a nickname to see your submissions"
+          }</p></div>`;
+    }
+
+    // Create idea card HTML
+    function createIdeaCard(idea, isUserIdea = false) {
+      return `
+        <div class="idea-card" data-id="${idea.id}" style="${isUserIdea ? 'background: rgba(255,255,255,0.3);' : ''}">
+          <h3><span class="author">${idea.nickname || "Anonymous"}</span> posted: ${idea.title}</h3>
+          <p>${idea.description}</p>
+          <div>
+            <span class="difficulty ${idea.difficulty}">
+              ${idea.difficulty.charAt(0).toUpperCase() + idea.difficulty.slice(1)}
+            </span>
+            ${idea.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+          </div>
+          <div style="margin-top: 10px;">
+            <button class="upvote-btn" data-id="${idea.id}">
+              ▲ ${idea.upvotes || 0}
+            </button>
+            <button class="comment-btn" data-id="${idea.id}">
+              💬 ${idea.comments ? idea.comments.length : 0}
+            </button>
+          </div>
+          <div class="comments-section" id="comments-${idea.id}">
+            <div class="comments-list">
+              ${idea.comments && idea.comments.length > 0 
+                ? idea.comments.map(comment => `
+                  <div class="comment">
+                    <p>${filterBadWords(comment.text)}</p>
+                    <small>${new Date(comment.timestamp).toLocaleString()}</small>
+                  </div>
+                `).join("") 
+                : '<p>No comments yet</p>'}
+            </div>
+            <form class="comment-form" data-id="${idea.id}">
+              <input type="text" class="comment-input" placeholder="Add a comment..." required />
+              <button type="submit">Post</button>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    // Handle form submission
+    ideaForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nickname = document.getElementById("nickname").value.trim();
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const tags = document.getElementById("tags").value
+        .split(",")
+        .map(tag => tag.trim())
+        .filter(tag => tag.length > 0);
+      const difficulty = document.getElementById("difficulty").value;
+
+      if (!difficulty) {
+        showToast("Please select a difficulty level");
+        return;
+      }
+
+      const newIdea = { 
+        id: generateId(),
+        title: filterBadWords(title),
+        description: filterBadWords(description),
+        tags,
+        difficulty,
+        nickname: nickname || "Anonymous",
+        upvotes: 0,
+        comments: [],
+        createdAt: new Date().toISOString()
+      };
+      
+      ideas.unshift(newIdea);
+      saveIdeas();
+      ideaForm.reset();
+      displayIdeas();
+      showToast("Idea submitted successfully!");
+    });
+
+    // Handle interactions
+    document.addEventListener("click", function(e) {
+      if (e.target.classList.contains("upvote-btn")) {
+        const ideaId = e.target.dataset.id;
+        const idea = ideas.find(i => i.id === ideaId);
+        if (idea) {
+          idea.upvotes = (idea.upvotes || 0) + 1;
+          saveIdeas();
+          displayIdeas();
+          showToast("Upvoted!");
+        }
+      }
+      
+      if (e.target.classList.contains("comment-btn")) {
+        const ideaId = e.target.dataset.id;
+        const commentsSection = document.getElementById(`comments-${ideaId}`);
+        commentsSection.style.display = commentsSection.style.display === 'block' ? 'none' : 'block';
+      }
+    });
+
+    // Handle comment submission
+    document.addEventListener("submit", function(e) {
+      if (e.target.classList.contains("comment-form")) {
+        e.preventDefault();
+        const ideaId = e.target.dataset.id;
+        const commentInput = e.target.querySelector(".comment-input");
+        const commentText = commentInput.value.trim();
+        
+        if (commentText) {
+          const filteredText = filterBadWords(commentText);
+          const idea = ideas.find(i => i.id === ideaId);
+          if (idea) {
+            idea.comments = idea.comments || [];
+            idea.comments.push({
+              text: filteredText,
+              timestamp: new Date().toISOString()
+            });
+            saveIdeas();
+            commentInput.value = "";
+            displayIdeas();
+            showToast("Comment added!");
+            document.getElementById(`comments-${ideaId}`).style.display = 'block';
+          }
+        }
+      }
+    });
+
+    // Handle filtering
+    searchInput.addEventListener("input", displayIdeas);
+    languageFilter.addEventListener("change", displayIdeas);
+    difficultyFilter.addEventListener("change", displayIdeas);
+
+    // Toggle dark mode
+    themeToggle.addEventListener("click", function() {
+      document.body.classList.toggle("dark-mode");
+      themeToggle.textContent = document.body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌓 Dark Mode";
+      localStorage.setItem("ideaForgeDarkMode", document.body.classList.contains("dark-mode"));
+    });
+
+    // Initialize dark mode
+    if (localStorage.getItem("ideaForgeDarkMode") === "true") {
+      document.body.classList.add("dark-mode");
+      themeToggle.textContent = "☀️ Light Mode";
+    }
+
+    // Initial display
+    displayIdeas();
+  </script>
+</body>
 </html>
