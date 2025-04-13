@@ -1,3 +1,6 @@
+// Render URL
+const renderUrl = 'https://ideaforge-1.onrender.com';
+
 // Create particles
 function createParticles() {
     const particlesContainer = document.querySelector('.particles');
@@ -22,10 +25,10 @@ function createParticles() {
       
       particlesContainer.appendChild(particle);
     }
-  }
+}
 
-  // Domain selection limit
-  function setupDomainSelection() {
+// Domain selection limit
+function setupDomainSelection() {
     const checkboxes = document.querySelectorAll('.domain-option input');
     const maxSelections = 3;
     
@@ -39,10 +42,10 @@ function createParticles() {
         }
       });
     });
-  }
+}
 
-  // Form validation
-  function setupFormValidation() {
+// Form validation
+function setupFormValidation() {
     const form = document.querySelector('form');
     
     form.addEventListener('submit', function(e) {
@@ -54,15 +57,15 @@ function createParticles() {
       if (email && password) {
         // Add your login logic here
         alert('Login successful! Redirecting...');
-         window.location.href = 'dashboard.html';
+        window.location.href = `${renderUrl}/dashboard.html`; // Redirect to dashboard on Render URL
       } else {
         alert('Please fill in all required fields');
       }
     });
-  }
+}
 
-  // Initialize everything when DOM is loaded
-  document.addEventListener('DOMContentLoaded', function() {
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
     createParticles();
     setupDomainSelection();
     setupFormValidation();
@@ -72,4 +75,4 @@ function createParticles() {
       document.querySelector('.particles').innerHTML = '';
       createParticles();
     });
-  });
+});
