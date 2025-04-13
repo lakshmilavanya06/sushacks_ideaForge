@@ -21,6 +21,9 @@ function formatTimestamp(date) {
 
 // Message Handling
 function sendMessage() {
+  const response = await fetch('https://ideaforge-1.onrender.com/chatbot', {
+
+
   const input = document.getElementById("userInput");
   const message = input.value.trim();
   if (!message) return;
